@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Datepicker functionality</title>
+  <link
+          th:href="@{https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css}"
+          rel="stylesheet">
+  <script th:src="@{https://code.jquery.com/jquery-1.10.2.js}"></script>
+  <script th:src="@{https://code.jquery.com/ui/1.10.4/jquery-ui.js}"></script>
+  <style>
+
+    .ui-datepicker td.red a{
+      color:#f00 !important;
+    }
+
+    .ui-datepicker-week-end, .ui-datepicker-week-end a.ui-state-default {background:yellow;}
+  </style>
+  <!-- Javascript -->
+  <script>
+    $(function() {
+      // var date = $(this).datepicker('getDate');
+      // var dayOfWeek = date.getUTCDay();
+      // console.log((dayOfWeek));
+      // var element = document.getElementsByClassName("ui-state-default");
+      // console.log(element);
+      // for (const elementKey, value in element) {
+      // 	let day = elementKey.innerHTML;
+      // 	console.log(day);
+      // }
+
+
+
+
+      $("#datepicker-2").datepicker();
+      $("#datepicker-3").datepicker({
+        appendText : "(yy-mm-dd)",
+        dateFormat : "yy-mm-dd"
+      });
+    });
+
+
+  </script>
+</head>
+
+<body>
+<!-- HTML -->
+
+
+
+</body>
+</html>
