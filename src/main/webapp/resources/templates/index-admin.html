@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:div="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>jQuery UI Datepicker functionality</title>
@@ -10,47 +10,54 @@
     <script th:src="@{https://code.jquery.com/ui/1.10.4/jquery-ui.js}"></script>
     <style>
 
-        .ui-datepicker td.red a{
-            color:#f00 !important;
+        .ui-datepicker td.red a {
+            color: #f00 !important;
         }
 
-        td, th{
-            padding: 0px 20px;
+        table {
+            border-collapse: collapse;
         }
-        .ui-datepicker-week-end, .ui-datepicker-week-end a.ui-state-default {background:yellow;}
+        h3,h4{
+            text-align: center;
+        }
+        td, th {
+            padding: 5px 20px;
+        }
+
+
     </style>
     <!-- Javascript -->
     <script>
-        $(function() {
-            // var date = $(this).datepicker('getDate');
-            // var dayOfWeek = date.getUTCDay();
-            // console.log((dayOfWeek));
-            // var element = document.getElementsByClassName("ui-state-default");
-            // console.log(element);
-            // for (const elementKey, value in element) {
-            // 	let day = elementKey.innerHTML;
-            // 	console.log(day);
-            // }
-
-
-
+        $(function () {
 
             $("#datepicker-2").datepicker();
             $("#datepicker-3").datepicker({
-                appendText : "(yy-mm-dd)",
-                dateFormat : "yy-mm-dd"
+                appendText: "(yy-mm-dd)",
+                dateFormat: "yy-mm-dd"
             });
+
+            hideMsg();
         });
 
+        function hideMsg() {
 
+            setTimeout(function(){
+               $("#mgs").hide(0);
+               $("#mg2").hide(0);
+            }, 3000);
+        }
     </script>
 </head>
 
 <body>
 <!-- HTML -->
+
+<h4 id="mgs" style="color: red" th:if="${mgs}" th:text="${mgs}">}</h4>
+<h4 id="mg2" style="color: green" th:if="${mgs2}" th:text="${mgs2}">}</h4>
+
 <h3>Nhập Thông Tin</h3>
 <form th:action="@{/admin}" th:object="${day}" method="post">
-    <table>
+    <table align="center" border="1">
         <tr>
             <td>Enter Date:</td>
             <td><input th:field="*{date}" type="text" id="datepicker-3"></td>
@@ -68,23 +75,25 @@
 
         <tr>
             <td>Ghi chú:</td>
-            <td><input th:field="*{note}" type="text" ></td>
+            <td><input th:field="*{note}" type="text"></td>
         </tr>
 
         <tr>
-            <td colspan="2"><input type="submit" value="Submit" /></td>
+            <td colspan="2"><input type="submit" value="Submit"/></td>
         </tr>
+    </table>
 </form>
-<div style="color: red" th:if= "${mgs}" th:text="${mgs}">}</div>
+
 
 <h3>Danh sách dữ liệu</h3>
 
-<table align="center" border="1">
+<table align="center" border="1" >
     <tr>
         <th>Dd</th>
         <th>Date</th>
         <th>Type</th>
         <th>Note</th>
+        <th>Action</th>
     </tr>
 
 
@@ -99,11 +108,24 @@
     </tbody>
 
     <tr th:each="l : ${list}">
-
         <td th:text="${l.id}"></td>
         <td th:text="${l.date}"></td>
         <td th:text="${l.type}"></td>
+
+<!--        <td th:switch="${l.type}">-->
+<!--            <span th:case="'NGAYNGHI'">-->
+<!--                ngày nghỉ-->
+<!--            </span>-->
+<!--            <span th:case="'NGAYLAM'">-->
+<!--                ngày làm-->
+<!--            </span>-->
+
+<!--        </td>-->
+
         <td th:text="${l.note}"></td>
+        <td>
+            <a th:href="@{/admin/{id}(id=${l.id})}">Delete</a>
+        </td>
     </tr>
 </table>
 

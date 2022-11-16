@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -41,8 +38,16 @@ public class AdminController {
         if (day != null && checkDateExist == false){
             dayRepository.save(day);
         }else {
-            rm.addAttribute("mgs", "dữ liệu ngày " + day.getDate() + "đã tồn tại");
+            rm.addFlashAttribute("mgs", "dữ liệu ngày " + day.getDate() + " đã tồn tại");
         }
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/{id}")
+    public String delete(@PathVariable Long id, RedirectAttributes rm) {
+        Day day = dayRepository.findById(id).orElseThrow(() -> new RuntimeException("data not exit"));
+        dayRepository.delete(day);
+        rm.addFlashAttribute("mgs2", "dữ liệu ngày " + day.getDate() + " đã được xóa");
         return "redirect:/admin";
     }
 }

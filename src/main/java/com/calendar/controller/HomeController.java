@@ -1,17 +1,13 @@
 package com.calendar.controller;
 
+import com.calendar.model.Day;
 import com.calendar.repository.DayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import com.calendar.model.Day;
-
-import java.util.Optional;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -20,7 +16,10 @@ public class HomeController {
 
 	@GetMapping(value = { "/"})
 	  public String addEmployee(Model model) {
-
+		List<Day> list = dayRepository.findAll();
+		if (list.size() > 0){
+			model.addAttribute("list", list);
+		}
 	    return "index";
 	  }
 	

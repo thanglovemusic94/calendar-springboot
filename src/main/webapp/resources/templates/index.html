@@ -1,46 +1,145 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>jQuery UI Datepicker functionality</title>
-<link
-	th:href="@{https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css}"
-	rel="stylesheet">
-<script th:src="@{https://code.jquery.com/jquery-1.10.2.js}"></script>
-<script th:src="@{https://code.jquery.com/ui/1.10.4/jquery-ui.js}"></script>
-<style>
+    <meta charset="utf-8">
+    <title>jQuery UI Datepicker functionality</title>
+    <link
+            th:href="@{https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css}"
+            rel="stylesheet">
+    <script th:src="@{https://code.jquery.com/jquery-1.10.2.js}"></script>
+    <script th:src="@{https://code.jquery.com/ui/1.10.4/jquery-ui.js}"></script>
+    <style>
+        .ui-state-highlight, .ui-state-active {
+            background: green !important;
+            color: white !important;
+            border: 1px solid green !important;
+        }
 
-	.ui-datepicker td.red a{
-		color:#f00 !important;
-	}
+        .ui-datepicker td.red a {
+            color: #f00 !important;
+        }
 
-	.ui-datepicker-week-end, .ui-datepicker-week-end a.ui-state-default {background:yellow;}
-</style>
-<!-- Javascript -->
-<script>
-	$(function() {
-		// var date = $(this).datepicker('getDate');
-		// var dayOfWeek = date.getUTCDay();
-		// console.log((dayOfWeek));
-		// var element = document.getElementsByClassName("ui-state-default");
-		// console.log(element);
-		// for (const elementKey, value in element) {
-		// 	let day = elementKey.innerHTML;
-		// 	console.log(day);
-		// }
+        .sat_day {
+            background: blueviolet !important;
+            color: white !important;
+        }
 
-		$("#datepicker-2").datepicker();
+        .sun_day {
+            background: burlywood !important;
+            color: white !important;
+        }
+    </style>
+    <!-- Javascript -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(function () {
+            $("#datepicker-2").datepicker();
+            checkDateColor();
 
-	});
+            $("[data-handler=prev]").click(function () {
+                return checkDateColor();
+            })
+
+            $("[data-handler=next]").click(function () {
+                return checkDateColor();
+            })
 
 
-</script>
+        });
+
+        function checkDateColor() {
+            var tdList = $("[data-handler=selectDay]");
+            for (let i = 0; i < tdList.length; i++) {
+                $(tdList[i]).children().click(function () {
+                    return false;
+                })
+                // if ($(tdList[i]).children().hasClass("ui-state-highlight") == true){
+                // 	$(tdList[i]).children().removeClass("ui-state-highlight");
+                // 	$(tdList[i]).children().removeClass("ui-state-active");
+                // }
+                const year = $(tdList[i]).attr("data-year");
+                const month = parseInt($(tdList[i]).attr("data-month")) + 1 + "";
+                let day = $(tdList[i]).children()[0].innerHTML;
+                if (day.length == 1) {
+                    day = "0" + day;
+                }
+                // console.log(tdList[i]);
+                // console.log(year);
+                // console.log(month);
+                // console.log(day);
+                const dateString = year + "-" + month + "-" + day;
+                $(tdList[i]).attr("date", dateString);
+                const date = new Date(year, month - 1, day);
+                //console.log(date)
+                const dayOfWeek = date.getDay();
+                console.log(dayOfWeek);
+                if (dayOfWeek == 6) {
+                    $(tdList[i]).children().addClass("sat_day");// thu 7
+                } else if (dayOfWeek == 0) {
+                    $(tdList[i]).children().addClass("sun_day");//chu nhat
+                } else {
+                    $(tdList[i]).children().addClass("");
+                }
+
+                const list = /*[[${list}]]*/ 'default';
+                if (list != null) console.log(list);
+
+                if (list != null) {
+                    for (let j = 0; j < list.length; j++) {
+                        if (list[j].date === dateString) {
+
+                            if (list[j].type == "NGAYLAM") {
+
+                                if (dayOfWeek === 6) {
+                                    console.log(dayOfWeek)
+                                    let check = $(tdList[i]).children().hasClass("sat_day");// thu 7
+                                    // console.log(dateString, check);
+                                    if (check === true) {
+                                        $(tdList[i]).children().removeClass("sat_day");// thu 7
+                                    }
+                                } else if (dayOfWeek === 0) {
+                                    console.log(dayOfWeek)
+                                    let check = $(tdList[i]).children().hasClass("sun_day");// chu nhat
+                                    console.log(dateString, check);
+                                    if (check === true) {
+                                        $(tdList[i]).children().removeClass("sun_day");// chu nhat
+                                    }
+                                } else {
+                                    $(tdList[i]).children().removeClass("");
+                                }
+                            } else { // ngay nghỉ
+
+                                if (dayOfWeek == 6) {
+                                    let check = $(tdList[i]).children().hasClass("sat_day");// thu 7
+                                    if (check === false) {
+                                        $(tdList[i]).children().addClass("sat_day");// thu 7
+                                    }
+                                } else if (dayOfWeek == 0) {
+                                    let check = $(tdList[i]).children().hasClass("sun_day");// chu nhat
+                                    if (check === false) {
+                                        $(tdList[i]).children().addClass("sun_day");// chu nhat
+                                    }
+                                } else {
+                                    $(tdList[i]).children().addClass("sun_day");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        /*]]>*/
+    </script>
 </head>
 
 <body>
-	<div id="datepicker-2"></div>
-	<div align="center">
-		<a th:href="@{/admin}">go to Admin</a>
-	</div>
+<div style="text-align: center">
+    <div id="datepicker-2" style="display: inline-block"></div>
+</div>
+
+
+<div align="center">
+    <a th:href="@{/admin}">go to Admin</a>
+</div>
 </body>
 </html>
