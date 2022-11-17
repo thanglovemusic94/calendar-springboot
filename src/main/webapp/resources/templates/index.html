@@ -2,12 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>jQuery UI Datepicker functionality</title>
-    <link
-            th:href="@{https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css}"
-            rel="stylesheet">
-    <script th:src="@{https://code.jquery.com/jquery-1.10.2.js}"></script>
-    <script th:src="@{https://code.jquery.com/ui/1.10.4/jquery-ui.js}"></script>
+    <title>Calendar - Spring Boot</title>
+
+    <title>Calendar - Spring Boot</title>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/spring.ico}" />
+    <link th:href="@{/jquery-ui.css}" rel="stylesheet">
+<!--    <link th:href="@{/fontawesome.min.css}" rel="stylesheet">-->
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet">
+
+    <script th:src="@{/jquery-1.10.2.js}"></script>
+<!--    <script th:src="@{/jquery.twbsPagination.js}"></script>-->
+    <script th:src="@{/jquery-ui.js}"></script>
     <style>
         .ui-state-highlight, .ui-state-active {
             background: green !important;
@@ -15,15 +20,16 @@
             border: 1px solid green !important;
         }
 
-        .ui-datepicker td.red a {
-            color: #f00 !important;
-        }
+
 
         .sat_day {
             background: blueviolet !important;
             color: white !important;
         }
 
+        .ui-datepicker td.red a, .color_note {
+            color: #f00 !important;
+        }
         .sun_day {
             background: burlywood !important;
             color: white !important;
@@ -35,16 +41,13 @@
         $(function () {
             $("#datepicker-2").datepicker();
             checkDateColor();
-
-            $("[data-handler=prev]").click(function () {
+            $(document).on("click","[data-handler=prev]",function() {
                 return checkDateColor();
-            })
+            });
 
-            $("[data-handler=next]").click(function () {
+            $(document).on("click","[data-handler=next]",function() {
                 return checkDateColor();
-            })
-
-
+            });
         });
 
         function checkDateColor() {
@@ -88,6 +91,7 @@
                     for (let j = 0; j < list.length; j++) {
                         if (list[j].date === dateString) {
 
+
                             if (list[j].type == "NGAYLAM") {
 
                                 if (dayOfWeek === 6) {
@@ -123,6 +127,10 @@
                                     $(tdList[i]).children().addClass("sun_day");
                                 }
                             }
+                            if (list[j].note.length > 0){
+                                $(tdList[i]).attr("title", list[j].note);
+                                $(tdList[i]).children().addClass("color_note");
+                            }
                         }
                     }
                 }
@@ -130,6 +138,7 @@
         }
         /*]]>*/
     </script>
+
 </head>
 
 <body>
