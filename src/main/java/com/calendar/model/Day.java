@@ -1,14 +1,12 @@
 package com.calendar.model;
 
 import com.calendar.enums.TypeDay;
+import com.calendar.enums.TypeDayConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -23,6 +21,7 @@ public class Day {
 	private String date;
 
 	private String note;
+	@Convert(converter = TypeDayConverter.class)
 	private TypeDay type;
 
 	public Long getId() {
